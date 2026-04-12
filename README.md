@@ -45,23 +45,23 @@ Real-world use cases for DPI include:
 The engine features a full, parallel multi-threaded pipeline implemented using Node.js `worker_threads`, mimicking the original C++ threading architecture. The default configuration uses 2 Load Balancers (LBs) and 2 Fast Path Processors (FPs) per LB, yielding 4 worker threads.
 
 ```text
-  ┌─────────────┐
-  │ PCAP Reader │  (Reads packets from input file)
-  └──────┬──────┘
-         │ djb2(5-tuple) % num_lbs
-         ▼
-  ┌──────┴──────┐
+  ┌───────────────┐
+  │  PCAP Reader  │  (Reads packets from input file)
+  └───────┬───────┘
+          │ djb2(5-tuple) % num_lbs
+          ▼
+  ┌───────┴───────┐
   │ Load Balancers│  (Distributes to worker FPs)
-  │   LB0 │ LB1   │
-  └──┬────┴────┬──┘
-     │         │   djb2(5-tuple) % num_fps
-     ▼         ▼
-  ┌──┴──┐   ┌──┴──┐
-  │FP0-1│   │FP2-3│  (Fast Path Worker Threads: parsing, TLS extraction, blocking)
-  └──┬──┘   └──┬──┘
-     │         │
-     ▼         ▼
-  ┌──┴─────────┴──┐
+  │  LB0  │  LB1  │
+  └───┬───┴───┬───┘
+      │       │    djb2(5-tuple) % num_fps
+      ▼       ▼
+  ┌───┴───┐ ┌───┴───┐
+  │ FP0-1 │ │ FP2-3 │  (Fast Path Worker Threads: parsing, TLS extraction, blocking)
+  └───┬───┘ └───┬───┘
+      │         │
+      ▼         ▼
+  ┌───┴───────┴───┐
   │ Output Writer │  (Collects forwarded packets and writes PCAP)
   └───────────────┘
 ```
