@@ -1,6 +1,6 @@
 # Packet Analyzer - DPI Engine
 
-Deep Packet Inspection Engine - A high-performance, multi-threaded Node.js port of a low-level C++ network analyzer.
+Deep Packet Inspection Engine - A high-performance, multi-threaded native Node.js network analyzer.
 
 This document explains **everything** about this project - from basic networking concepts to the complete code architecture. After reading this, you should understand exactly how packets flow through the system without needing to read the code.
 
@@ -281,7 +281,7 @@ const designatedWorker = workers[hash % numberOfFPs];
 - All states remain naturally concurrent!
 
 ### Thread-Safe Architecture
-To communicate without collision, the engine pushes frames across message channels into an `AsyncQueue`. Identical to C++ `std::condition_variable`, Node.js uses unresolved `Promise` arrays causing worker event-loops to suspend gracefully when the queue empties, preventing hyper-active CPU spins.
+To communicate without collision, the engine pushes frames across message channels into an `AsyncQueue`. Using unresolved `Promise` arrays, worker event-loops suspend gracefully when the queue empties, preventing hyper-active CPU spins.
 
 ---
 
@@ -491,7 +491,7 @@ node src/indexMT.js in.pcap out.pcap \
 ## Performance Information
 - **Node.js Parallel Environment:** Built to completely ignore event loop restrictions using V8 `worker_threads`.
 - **Binary Zero-Copy Extraction:** `Buffer.subarray()` ensures gigabytes of PCAP files aren't duplicating arrays under variable garbage collection constraints.
-- **Portability:** Instantly compatible on Windows, macOS, and Linux without worrying about complex generic C++ Makefile compiling dependencies. 
+- **Portability:** Instantly compatible on Windows, macOS, and Linux without worrying about complex or external build dependencies. 
 
 ---
 
