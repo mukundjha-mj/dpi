@@ -1,0 +1,33 @@
+{
+  "name": "packet-analyzer",
+  "version": "1.0.0",
+  "description": "Deep Packet Inspection Engine - Node.js port of C++ DPI Engine",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:mt": "node src/indexMT.js",
+    "generate-test": "node generateTestPcap.js",
+    "test": "node src/index.js test_dpi.pcap output_test.pcap && node -e \"require('fs').unlinkSync('output_test.pcap')\""
+  },
+  "keywords": [
+    "dpi",
+    "deep-packet-inspection",
+    "network",
+    "pcap",
+    "packet-analyzer",
+    "firewall",
+    "tls",
+    "sni"
+  ],
+  "author": "Mukund Jha",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mukundjha-mj/dpi"
+  },
+  "os": ["linux", "darwin", "win32"],
+  "cpu": ["x64", "arm64"]
+}
