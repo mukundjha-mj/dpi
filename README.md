@@ -200,29 +200,29 @@ By binding hash logic explicitly, the engine asserts definitive Flow Affinity. I
 
 ```text
 ╔══════════════════════════════════════════════════════════════╗
-║                    DPI ENGINE v1.0 (JS)                     ║
-║               Deep Packet Inspection System                 ║
+║                     DPI ENGINE v1.0 (JS)                     ║
+║                Deep Packet Inspection System                 ║
 ╠══════════════════════════════════════════════════════════════╣
-║ Configuration:                                              ║
-║   Load Balancers:      2                                    ║
-║   FPs per LB:          2                                    ║
-║   Total FP threads:    4                                    ║
+║ Configuration:                                               ║
+║   Load Balancers:               2                            ║
+║   FPs per LB:                   2                            ║
+║   Total FP threads:             4                            ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ╔══════════════════════════════════════════════════════════════╗
 ║                      PROCESSING REPORT                       ║
 ╠══════════════════════════════════════════════════════════════╣
-║ Total Packets:              77                             ║
-║ Total Bytes:              5738                             ║
-║ TCP Packets:                73                             ║
-║ UDP Packets:                 4                             ║
-║ Forwarded:                  68                             ║
-║ Dropped:                     9                             ║
-║ Drop Rate:              11.69%                             ║
+║ Total Packets:                 77                            ║
+║ Total Bytes:                 5738                            ║
+║ TCP Packets:                   73                            ║
+║ UDP Packets:                    4                            ║
+║ Forwarded:                     68                            ║
+║ Dropped:                        9                            ║
+║ Drop Rate:                 11.69%                            ║
 ╠══════════════════════════════════════════════════════════════╣
-║ LOAD BALANCER STATISTICS                                    ║
-║   LB0 Dispatched:           38                             ║
-║   LB1 Dispatched:           39                             ║
+║ LOAD BALANCER STATISTICS                                     ║
+║   LB0 Dispatched:              38                            ║
+║   LB1 Dispatched:              39                            ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
