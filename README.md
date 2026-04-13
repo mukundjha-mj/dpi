@@ -73,13 +73,13 @@ When you visit a website, data travels through multiple "layers":
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
-│ Layer 7: Application    │ HTTP, TLS, DNS               │
+│ Layer 7: Application    │ HTTP, TLS, DNS                │
 ├─────────────────────────────────────────────────────────┤
-│ Layer 4: Transport      │ TCP (reliable), UDP (fast)   │
+│ Layer 4: Transport      │ TCP (reliable), UDP (fast)    │
 ├─────────────────────────────────────────────────────────┤
-│ Layer 3: Network        │ IP addresses (routing)       │
+│ Layer 3: Network        │ IP addresses (routing)        │
 ├─────────────────────────────────────────────────────────┤
-│ Layer 2: Data Link      │ MAC addresses (local network)│
+│ Layer 2: Data Link      │ MAC addresses (local network) │
 └─────────────────────────────────────────────────────────┘
 ```
 
