@@ -929,26 +929,19 @@ Offset 44+N:   Session ID data
 
 ### The Blocking Flow
 
-```text
-Packet arrives
-      │
-      ▼
-┌─────────────────────────────────┐
-│ Is source IP in blocked list?  │──Yes──► DROP
-└───────────────┬─────────────────┘
-                │No
-                ▼
-┌─────────────────────────────────┐
-│ Is app type in blocked list?   │──Yes──► DROP
-└───────────────┬─────────────────┘
-                │No
-                ▼
-┌─────────────────────────────────┐
-│ Does SNI match blocked domain? │──Yes──► DROP
-└───────────────┬─────────────────┘
-                │No
-                ▼
-            FORWARD
+```mermaid
+flowchart TD
+    A["📨 Packet Arrives"] --> B{"Source IP in\nblockedIPs Set?"}
+    B -->|Yes| X1["🚫 DROP"]
+    B -->|No| C{"App type in\nblockedApps Set?"}
+    C -->|Yes| X2["🚫 DROP"]
+    C -->|No| D{"SNI contains\nblockedDomains substring?"}
+    D -->|Yes| X3["🚫 DROP"]
+    D -->|No| F["✅ FORWARD"]
+    style X1 fill:#e94560,color:#fff
+    style X2 fill:#e94560,color:#fff
+    style X3 fill:#e94560,color:#fff
+    style F fill:#0f9b58,color:#fff
 ```
 
 ### Flow-Level Blocking
@@ -1060,68 +1053,65 @@ Worker Threads (per FP):
 node src/index.js test_dpi.pcap out.pcap
 ```
 
-```text
-╔══════════════════════════════════════════════════════════════╗
-║                    DPI ENGINE v1.0 (JS)                     ║
-╚══════════════════════════════════════════════════════════════╝
+> **DPI ENGINE v1.0 (JS)**
 
-[DPI] Processing packets...
+#### Processing Report
 
-╔══════════════════════════════════════════════════════════════╗
-║                      PROCESSING REPORT                       ║
-╠══════════════════════════════════════════════════════════════╣
-║ Total Packets:              77                             ║
-║ Total Bytes:              5738                             ║
-║ TCP Packets:                73                             ║
-║ UDP Packets:                 4                             ║
-║ Forwarded:                  77                             ║
-║ Dropped:                     0                             ║
-║ Active Flows:               27                             ║
-║ Blocked Flows:               0                             ║
-╠══════════════════════════════════════════════════════════════╣
-║                    APPLICATION BREAKDOWN                     ║
-╠══════════════════════════════════════════════════════════════╣
-║ HTTPS                 55  71.4% ##############             ║
-║ DNS                    4   5.2% #                          ║
-║ HTTP                   2   2.6%                            ║
-║ Google                 1   1.3%                            ║
-║ YouTube                1   1.3%                            ║
-║ Facebook               1   1.3%                            ║
-║ Instagram              1   1.3%                            ║
-║ Twitter/X              1   1.3%                            ║
-║ Amazon                 1   1.3%                            ║
-║ Netflix                1   1.3%                            ║
-║ GitHub                 1   1.3%                            ║
-║ Discord                1   1.3%                            ║
-║ Zoom                   1   1.3%                            ║
-║ Telegram               1   1.3%                            ║
-║ TikTok                 1   1.3%                            ║
-║ Spotify                1   1.3%                            ║
-║ Cloudflare             1   1.3%                            ║
-║ Microsoft              1   1.3%                            ║
-║ Apple                  1   1.3%                            ║
-╚══════════════════════════════════════════════════════════════╝
+| Metric | Value |
+|--------|------:|
+| Total Packets | 77 |
+| Total Bytes | 5738 |
+| TCP Packets | 73 |
+| UDP Packets | 4 |
+| Forwarded | 77 |
+| Dropped | 0 |
+| Active Flows | 27 |
+| Blocked Flows | 0 |
 
-[Detected Applications/Domains]
-  - www.google.com -> Google
-  - www.youtube.com -> YouTube
-  - www.facebook.com -> Facebook
-  - www.instagram.com -> Instagram
-  - twitter.com -> Twitter/X
-  - www.amazon.com -> Amazon
-  - www.netflix.com -> Netflix
-  - github.com -> GitHub
-  - discord.com -> Discord
-  - zoom.us -> Zoom
-  - web.telegram.org -> Telegram
-  - www.tiktok.com -> TikTok
-  - open.spotify.com -> Spotify
-  - www.cloudflare.com -> Cloudflare
-  - www.microsoft.com -> Microsoft
-  - www.apple.com -> Apple
+#### Application Breakdown
 
-Output written to: out.pcap
-```
+| App | Packets | % |
+|-----|--------:|----:|
+| HTTPS | 55 | 71.4% |
+| DNS | 4 | 5.2% |
+| HTTP | 2 | 2.6% |
+| Google | 1 | 1.3% |
+| YouTube | 1 | 1.3% |
+| Facebook | 1 | 1.3% |
+| Instagram | 1 | 1.3% |
+| Twitter/X | 1 | 1.3% |
+| Amazon | 1 | 1.3% |
+| Netflix | 1 | 1.3% |
+| GitHub | 1 | 1.3% |
+| Discord | 1 | 1.3% |
+| Zoom | 1 | 1.3% |
+| Telegram | 1 | 1.3% |
+| TikTok | 1 | 1.3% |
+| Spotify | 1 | 1.3% |
+| Cloudflare | 1 | 1.3% |
+| Microsoft | 1 | 1.3% |
+| Apple | 1 | 1.3% |
+
+#### Detected Domains
+
+| SNI | App |
+|-----|-----|
+| www.google.com | Google |
+| www.youtube.com | YouTube |
+| www.facebook.com | Facebook |
+| www.instagram.com | Instagram |
+| twitter.com | Twitter/X |
+| www.amazon.com | Amazon |
+| www.netflix.com | Netflix |
+| github.com | GitHub |
+| discord.com | Discord |
+| zoom.us | Zoom |
+| web.telegram.org | Telegram |
+| www.tiktok.com | TikTok |
+| open.spotify.com | Spotify |
+| www.cloudflare.com | Cloudflare |
+| www.microsoft.com | Microsoft |
+| www.apple.com | Apple |
 
 ### Output 2: Multi-Threaded with Blocking Rules
 
@@ -1129,41 +1119,34 @@ Output written to: out.pcap
 node src/indexMT.js test_dpi.pcap out.pcap --block-app YouTube --block-ip 192.168.1.50
 ```
 
-```text
-╔══════════════════════════════════════════════════════════════╗
-║                    DPI ENGINE v1.0 (JS)                     ║
-║               Deep Packet Inspection System                 ║
-╠══════════════════════════════════════════════════════════════╣
-║ Configuration:                                              ║
-║   Load Balancers:      2                                    ║
-║   FPs per LB:          2                                    ║
-║   Total FP threads:    4                                    ║
-╚══════════════════════════════════════════════════════════════╝
+> **DPI ENGINE v1.0 (JS) — Deep Packet Inspection System**
 
-[DPIEngine] Processing: test_dpi.pcap
-[DPIEngine] Output to:  out.pcap
+#### Configuration
 
-[Reader] Starting packet processing...
-[Reader] Finished reading 77 packets (77 sent to LBs)
+| Setting | Value |
+|---------|------:|
+| Load Balancers | 2 |
+| FPs per LB | 2 |
+| Total FP threads | 4 |
 
-╔══════════════════════════════════════════════════════════════╗
-║                      PROCESSING REPORT                       ║
-╠══════════════════════════════════════════════════════════════╣
-║ Total Packets:              77                             ║
-║ Total Bytes:              5738                             ║
-║ TCP Packets:                73                             ║
-║ UDP Packets:                 4                             ║
-║ Forwarded:                  68                             ║
-║ Dropped:                     9                             ║
-║ Drop Rate:              11.69%                             ║
-╠══════════════════════════════════════════════════════════════╣
-║ LOAD BALANCER STATISTICS                                    ║
-║   LB0 Dispatched:           38                             ║
-║   LB1 Dispatched:           39                             ║
-╚══════════════════════════════════════════════════════════════╝
+#### Processing Report
 
-Output written to: out.pcap
-```
+| Metric | Value |
+|--------|------:|
+| Total Packets | 77 |
+| Total Bytes | 5738 |
+| TCP Packets | 73 |
+| UDP Packets | 4 |
+| Forwarded | 68 |
+| Dropped | 9 |
+| Drop Rate | 11.69% |
+
+#### Load Balancer Statistics
+
+| LB | Dispatched |
+|----|----------:|
+| LB0 | 38 |
+| LB1 | 39 |
 
 > **Note:** `index.js` does **not** print THREAD STATISTICS or LOAD BALANCER STATISTICS (it's single-threaded). `indexMT.js` prints LOAD BALANCER STATISTICS via `dpiEngine.js`.
 
